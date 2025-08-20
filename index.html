@@ -3,14 +3,636 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixieRun PWA</title>
+    <title>FixieRun - Neural Interface</title>
+    <meta name="description" content="Cyberpunk fitness blockchain - Move to earn in the neural matrix">
+    <meta name="theme-color" content="#00f3ff">
+    
+    <!-- PWA Manifest Inline -->
+    <link id="manifest" rel="manifest" href="data:application/json;charset=utf-8;base64,ewogICJuYW1lIjogIkZpeGllUnVuIC0gTmV1cmFsIEludGVyZmFjZSIsCiAgInNob3J0X25hbWUiOiAiRml4aWVSdW4iLAogICJkZXNjcmlwdGlvbiI6ICJDeWJlcnB1bmsgZml0bmVzcyBibG9ja2NoYWluIC0gTmV1cmFsIE1hdHJpeCIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzBhMGEwYSIsCiAgInRoZW1lX2NvbG9yIjogIiMwMGYzZmYiLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU1Ua3lJaUJvWldsbmFIUTlJakU1TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJREU1TWlBeE9USWlJR1pwYkd3OUlpTXdNR1l6Wm1ZaUlIaHRiRzV6UFNKb2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1EQXdMM04yWnlJK1BISmxZM1FnZDJsa2RHZzlJakU1TWlJZ2FHVnBaMmgwUFNJeE9USWlJSEo0UFNJeE5pSWdabWxzYkQwaUkzQnlhVzFoY25raUx6NDhMM04yWno0PSIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLAogICAgICAicHVycG9zZSI6ICJtYXNrYWJsZSBhbnkiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIKICAgIH0sCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTlRFeUlpQm9aV2xuYUhROU9qVXhNaUlnZG1sbGQwSnZlRDBpTUNBd0lEVXhNaUExTVRJaUlHWnBiR3c5SWlNd01HWXpabVlpSUdobGJHNXpQU0pvZEhSd09pOHZkM2QzTG5jekxtOXlaeTh5TURBd0wzTjJaeUkrUEhKbFkzUWdkMmxrZEdnOU9qVXhNaUlnYUdWcFoyaDBQU0kxTVRJaUlISjRQU0l4TmlJZ1ptbHNiRDBpSXpCblptcG1ZaUl2UGp3dmMzWm5QZz09IiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIsCiAgICAgICJwdXJwb3NlIjogIm1hc2thYmxlIGFueSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIgogICAgfQogIF0KfQ==">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9IiMwMGYzZmYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIHJ4PSIxNiIgZmlsbD0iI3ByaW1hcnkiLz48L3N2Zz4=">
+    
     <link rel="stylesheet" href="./style.css">
-    <link rel="manifest" href="./manifest.json">
 </head>
 <body>
     <div id="app">
-        <!-- L'application sera chargée ici -->
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-content">
+                <div class="cyber-logo">
+                    <div class="logo-ring"></div>
+                    <div class="logo-center">FR</div>
+                </div>
+                <h1 class="neon-text">FIXIERUN</h1>
+                <p class="cyber-subtitle">NEURAL INTERFACE</p>
+                <div class="loading-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="loading-progress"></div>
+                    </div>
+                    <div class="loading-text">INITIALIZING QUANTUM MATRIX...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main App Container -->
+        <div id="main-app" class="app-container hidden">
+            <!-- Header -->
+            <header class="cyber-header">
+                <div class="header-content">
+                    <h1 id="page-title" class="neon-text">QUANTUM DASHBOARD</h1>
+                    <div class="neural-status">
+                        <div class="status-indicator active"></div>
+                        <span>NEURAL SYNC</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="app-main">
+                <!-- Home Page - Quantum Dashboard -->
+                <div id="home-page" class="page active">
+                    <div class="hero-terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-controls">
+                                <div class="control red"></div>
+                                <div class="control yellow"></div>
+                                <div class="control green"></div>
+                            </div>
+                            <div class="terminal-title">CYBER.RUNNER PROFILE</div>
+                        </div>
+                        <div class="terminal-content">
+                            <div class="user-info">
+                                <div class="cyber-avatar">
+                                    <div class="avatar-ring rotating"></div>
+                                    <div class="avatar-center">CR</div>
+                                </div>
+                                <div class="user-details">
+                                    <h2 class="neon-text">CYBER.RUNNER</h2>
+                                    <p class="callsign">NEURAL_NODE_7847</p>
+                                    <div class="status-badge online">ONLINE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="neural-stats">
+                        <div class="stat-module">
+                            <div class="module-header">
+                                <div class="module-icon">⚡</div>
+                                <span>TOTAL DISTANCE</span>
+                            </div>
+                            <div class="stat-value">312.4 KM</div>
+                            <div class="stat-change positive">+24.1 KM THIS WEEK</div>
+                        </div>
+                        <div class="stat-module">
+                            <div class="module-header">
+                                <div class="module-icon">🔋</div>
+                                <span>QUANTUM TOKENS</span>
+                            </div>
+                            <div class="stat-value">1,247 $FIX</div>
+                            <div class="stat-change positive">+48 TODAY</div>
+                        </div>
+                        <div class="stat-module">
+                            <div class="module-header">
+                                <div class="module-icon">🎯</div>
+                                <span>NEURAL STREAK</span>
+                            </div>
+                            <div class="stat-value">7 DAYS</div>
+                            <div class="stat-change">LEVEL 12 RUNNER</div>
+                        </div>
+                    </div>
+
+                    <button class="cyber-cta-button" id="initiate-protocol">
+                        <span class="btn-glow"></span>
+                        <div class="btn-content">
+                            <div class="btn-icon">▶</div>
+                            <span>INITIATE RIDE PROTOCOL</span>
+                        </div>
+                    </button>
+
+                    <div class="navigation-matrix">
+                        <div class="matrix-card" data-page="analytics">
+                            <div class="card-glow"></div>
+                            <div class="card-content">
+                                <div class="card-icon">📊</div>
+                                <h3>DATA NEXUS</h3>
+                                <p>NEURAL METRICS & ANALYTICS</p>
+                            </div>
+                        </div>
+                        <div class="matrix-card" data-page="defi">
+                            <div class="card-glow"></div>
+                            <div class="card-content">
+                                <div class="card-icon">💎</div>
+                                <h3>BLOCKCHAIN MATRIX</h3>
+                                <p>PORTFOLIO: $2,847.32</p>
+                            </div>
+                        </div>
+                        <div class="matrix-card" data-page="rewards">
+                            <div class="card-glow"></div>
+                            <div class="card-content">
+                                <div class="card-icon">🏆</div>
+                                <h3>CYBER MARKETPLACE</h3>
+                                <p>NEURAL UPGRADES AVAILABLE</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DeFi Page - Blockchain Matrix -->
+                <div id="defi-page" class="page">
+                    <div class="blockchain-terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-title">BLOCKCHAIN MATRIX</div>
+                            <div class="network-status">
+                                <div class="status-dot pulsing"></div>
+                                <span>POLYGON ZKEVM</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-display">
+                            <div class="portfolio-main">
+                                <h2 class="neon-value">$2,847.32</h2>
+                                <div class="portfolio-change positive">+5.2% (24H CYCLE)</div>
+                            </div>
+                            <button class="neural-wallet-btn">
+                                <span>CONNECT NEURAL WALLET</span>
+                                <div class="btn-scan-line"></div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="blockchain-nodes">
+                        <div class="node-module">
+                            <div class="node-header">
+                                <div class="node-icon">🔷</div>
+                                <span>$FIX BALANCE</span>
+                            </div>
+                            <div class="node-value">1,247 FIXIE</div>
+                            <div class="node-status active">ACTIVE NODE</div>
+                        </div>
+                        <div class="node-module">
+                            <div class="node-header">
+                                <div class="node-icon">⚙️</div>
+                                <span>STAKED NODES</span>
+                            </div>
+                            <div class="node-value">500 FIXIE</div>
+                            <div class="node-apy">APY: 12.5%</div>
+                        </div>
+                        <div class="node-module">
+                            <div class="node-header">
+                                <div class="node-icon">⚡</div>
+                                <span>PENDING SYNC</span>
+                            </div>
+                            <div class="node-value">23.4 FIXIE</div>
+                            <button class="claim-btn">CLAIM</button>
+                        </div>
+                    </div>
+
+                    <div class="transaction-matrix">
+                        <div class="matrix-header">
+                            <h3 class="neon-text">TRANSACTION MATRIX</h3>
+                        </div>
+                        <div class="transaction-list">
+                            <div class="transaction-row">
+                                <div class="tx-type neural-reward">NEURAL REWARD</div>
+                                <div class="tx-hash">0x742d...83f2</div>
+                                <div class="tx-amount positive">+15 FIXIE</div>
+                                <div class="tx-status verified">VERIFIED</div>
+                            </div>
+                            <div class="transaction-row">
+                                <div class="tx-type stake-lock">STAKE LOCK</div>
+                                <div class="tx-hash">0x951a...29c1</div>
+                                <div class="tx-amount">100 FIXIE</div>
+                                <div class="tx-status confirmed">CONFIRMED</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Page - Data Nexus -->
+                <div id="analytics-page" class="page">
+                    <div class="data-nexus-header">
+                        <h2 class="neon-text">DATA NEXUS</h2>
+                        <div class="neural-sync-indicator">
+                            <div class="sync-rings">
+                                <div class="sync-ring"></div>
+                                <div class="sync-ring"></div>
+                                <div class="sync-ring"></div>
+                            </div>
+                            <span>NEURAL EFFICIENCY: 87.4%</span>
+                        </div>
+                    </div>
+
+                    <div class="neural-metrics">
+                        <div class="metric-module">
+                            <div class="metric-header">
+                                <span>QUANTUM SYNC</span>
+                                <div class="metric-value">94.2%</div>
+                            </div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: 94.2%"></div>
+                            </div>
+                        </div>
+                        <div class="metric-module">
+                            <div class="metric-header">
+                                <span>CRYPTO MINING</span>
+                                <div class="metric-value">76.8%</div>
+                            </div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: 76.8%"></div>
+                            </div>
+                        </div>
+                        <div class="metric-module">
+                            <div class="metric-header">
+                                <span>NEURAL EFFICIENCY</span>
+                                <div class="metric-value">87.4%</div>
+                            </div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: 87.4%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="performance-analytics">
+                        <div class="analytics-terminal">
+                            <div class="terminal-header">
+                                <div class="terminal-title">PERFORMANCE ANALYTICS</div>
+                            </div>
+                            <div class="chart-container" style="position: relative; height: 200px;">
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="system-goals">
+                        <div class="goals-header">
+                            <h3 class="neon-text">SYSTEM OBJECTIVES</h3>
+                        </div>
+                        <div class="goal-module">
+                            <div class="goal-info">
+                                <h4>WEEKLY DISTANCE PROTOCOL</h4>
+                                <p>24.1 KM / 30 KM TARGET</p>
+                            </div>
+                            <div class="goal-progress">
+                                <div class="progress-ring" data-progress="80">
+                                    <div class="progress-text">80%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="goal-module">
+                            <div class="goal-info">
+                                <h4>TRAINING PROTOCOLS</h4>
+                                <p>3 / 4 SESSIONS</p>
+                            </div>
+                            <div class="goal-progress">
+                                <div class="progress-ring" data-progress="75">
+                                    <div class="progress-text">75%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workouts Page - Training Protocols -->
+                <div id="workouts-page" class="page">
+                    <div class="training-header">
+                        <h2 class="neon-text">TRAINING PROTOCOLS</h2>
+                        <button class="activate-btn" id="activate-training">
+                            <span>ACTIVATE TRAINING SEQUENCE</span>
+                            <div class="btn-pulse"></div>
+                        </button>
+                    </div>
+
+                    <div class="protocol-selection">
+                        <div class="protocol-card" data-protocol="neural-sprint">
+                            <div class="protocol-glow"></div>
+                            <div class="protocol-icon">🏃‍♂️</div>
+                            <h3>NEURAL SPRINT</h3>
+                            <p>HIGH-INTENSITY PROTOCOL</p>
+                            <div class="protocol-stats">
+                                <span>LAST: 5.2 KM • 28 MIN</span>
+                            </div>
+                        </div>
+                        <div class="protocol-card" data-protocol="quantum-cruise">
+                            <div class="protocol-glow"></div>
+                            <div class="protocol-icon">🚶‍♂️</div>
+                            <h3>QUANTUM CRUISE</h3>
+                            <p>STEADY-STATE PROTOCOL</p>
+                            <div class="protocol-stats">
+                                <span>LAST: 3.1 KM • 42 MIN</span>
+                            </div>
+                        </div>
+                        <div class="protocol-card" data-protocol="matrix-override">
+                            <div class="protocol-glow"></div>
+                            <div class="protocol-icon">🚴‍♂️</div>
+                            <h3>MATRIX OVERRIDE</h3>
+                            <p>EXTREME PROTOCOL</p>
+                            <div class="protocol-stats">
+                                <span>LAST: 15.8 KM • 45 MIN</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="execution-history">
+                        <div class="history-header">
+                            <h3 class="neon-text">EXECUTION HISTORY</h3>
+                        </div>
+                        <div class="execution-log">
+                            <div class="log-entry">
+                                <div class="entry-protocol neural-sprint">NEURAL SPRINT</div>
+                                <div class="entry-stats">
+                                    <span>5.2 KM • 18.7 KM/H • 420 KCAL</span>
+                                    <div class="entry-tokens">+15 FIXIE</div>
+                                </div>
+                                <div class="entry-date">2025-08-20</div>
+                                <div class="entry-status verified">VERIFIED</div>
+                            </div>
+                            <div class="log-entry">
+                                <div class="entry-protocol quantum-cruise">QUANTUM CRUISE</div>
+                                <div class="entry-stats">
+                                    <span>3.1 KM • 4.4 KM/H • 180 KCAL</span>
+                                    <div class="entry-tokens">+8 FIXIE</div>
+                                </div>
+                                <div class="entry-date">2025-08-19</div>
+                                <div class="entry-status verified">VERIFIED</div>
+                            </div>
+                            <div class="log-entry">
+                                <div class="entry-protocol matrix-override">MATRIX OVERRIDE</div>
+                                <div class="entry-stats">
+                                    <span>15.8 KM • 21.1 KM/H • 520 KCAL</span>
+                                    <div class="entry-tokens">+25 FIXIE</div>
+                                </div>
+                                <div class="entry-date">2025-08-18</div>
+                                <div class="entry-status verified">VERIFIED</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="achievement-matrix">
+                        <h3 class="neon-text">ACHIEVEMENT BADGES</h3>
+                        <div class="badge-grid">
+                            <div class="cyber-badge">
+                                <div class="badge-glow"></div>
+                                <span>TURBO BOOST</span>
+                            </div>
+                            <div class="cyber-badge">
+                                <div class="badge-glow"></div>
+                                <span>ENERGY REGEN</span>
+                            </div>
+                            <div class="cyber-badge">
+                                <div class="badge-glow"></div>
+                                <span>NEURAL ELITE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rewards Page - Cyber Marketplace -->
+                <div id="rewards-page" class="page">
+                    <div class="marketplace-header">
+                        <h2 class="neon-text">CYBER MARKETPLACE</h2>
+                        <div class="token-display">
+                            <div class="token-icon">💎</div>
+                            <div class="token-info">
+                                <span class="token-amount">1,247 FIXIE</span>
+                                <span class="token-label">AVAILABLE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="neural-leaderboard">
+                        <div class="leaderboard-header">
+                            <h3 class="neon-text">NEURAL LEADERBOARD</h3>
+                        </div>
+                        <div class="leaderboard-grid">
+                            <div class="rank-entry rank-1">
+                                <div class="rank-number">1</div>
+                                <div class="runner-info">
+                                    <div class="runner-avatar">QR</div>
+                                    <span>QUANTUMRIDER_001</span>
+                                </div>
+                                <div class="runner-tokens">2,341 FIXIE</div>
+                                <div class="runner-status neural-elite">NEURAL ELITE</div>
+                            </div>
+                            <div class="rank-entry rank-2">
+                                <div class="rank-number">2</div>
+                                <div class="runner-info">
+                                    <div class="runner-avatar">SD</div>
+                                    <span>SPEEDDEMON_PRO</span>
+                                </div>
+                                <div class="runner-tokens">1,967 FIXIE</div>
+                                <div class="runner-status cyber-champion">CYBER CHAMPION</div>
+                            </div>
+                            <div class="rank-entry rank-3 current-user">
+                                <div class="rank-number">3</div>
+                                <div class="runner-info">
+                                    <div class="runner-avatar">CR</div>
+                                    <span>CYBER.RUNNER</span>
+                                </div>
+                                <div class="runner-tokens">1,247 FIXIE</div>
+                                <div class="runner-status active-node">ACTIVE NODE</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="neural-upgrades">
+                        <div class="upgrades-header">
+                            <h3 class="neon-text">NEURAL UPGRADES</h3>
+                        </div>
+                        <div class="upgrades-grid">
+                            <div class="upgrade-card epic">
+                                <div class="card-glow"></div>
+                                <div class="upgrade-icon">⚡</div>
+                                <h4>CYBERVELOCITY BOOST</h4>
+                                <div class="upgrade-rarity epic">EPIC</div>
+                                <div class="upgrade-cost">500 FIXIE</div>
+                                <button class="upgrade-btn">ACQUIRE</button>
+                            </div>
+                            <div class="upgrade-card legendary">
+                                <div class="card-glow"></div>
+                                <div class="upgrade-icon">🧠</div>
+                                <h4>QUANTUM INTERFACE</h4>
+                                <div class="upgrade-rarity legendary">LEGENDARY</div>
+                                <div class="upgrade-cost">800 FIXIE</div>
+                                <button class="upgrade-btn disabled">INSUFFICIENT FUNDS</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nft-genesis">
+                        <div class="nft-header">
+                            <h3 class="neon-text">NFT GENESIS COLLECTION</h3>
+                        </div>
+                        <div class="nft-showcase">
+                            <div class="nft-card">
+                                <div class="nft-glow"></div>
+                                <div class="nft-display">🏍️</div>
+                                <h4>CYBERBIKE GENESIS #1247</h4>
+                                <div class="nft-type">EVOLVING NFT</div>
+                                <div class="nft-rarity ultra-rare">ULTRA RARE</div>
+                                <div class="nft-evolution">STAGE 3</div>
+                                <div class="nft-abilities">
+                                    <span class="ability">TURBO BOOST</span>
+                                    <span class="ability">ENERGY REGEN</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Page - Neural Interface -->
+                <div id="profile-page" class="page">
+                    <div class="neural-profile">
+                        <div class="profile-terminal">
+                            <div class="terminal-header">
+                                <div class="terminal-title">NEURAL INTERFACE</div>
+                            </div>
+                            <div class="profile-main">
+                                <div class="profile-avatar-large">
+                                    <div class="avatar-ring rotating"></div>
+                                    <div class="avatar-center">CR</div>
+                                </div>
+                                <div class="profile-details">
+                                    <h2 class="neon-text">CYBER.RUNNER</h2>
+                                    <p class="email">cyber@fixie.run</p>
+                                    <div class="neural-level">LEVEL 12 NEURAL NODE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="system-stats">
+                        <div class="stat-module">
+                            <h4>JOIN DATE</h4>
+                            <p>2024-03-15</p>
+                        </div>
+                        <div class="stat-module">
+                            <h4>TOTAL PROTOCOLS</h4>
+                            <p>127 SESSIONS</p>
+                        </div>
+                        <div class="stat-module">
+                            <h4>MAX STREAK</h4>
+                            <p>23 DAYS</p>
+                        </div>
+                    </div>
+
+                    <div class="system-settings">
+                        <div class="settings-header">
+                            <h3 class="neon-text">SYSTEM SETTINGS</h3>
+                        </div>
+                        <div class="settings-grid">
+                            <div class="setting-row">
+                                <span>NEURAL NOTIFICATIONS</span>
+                                <label class="cyber-toggle">
+                                    <input type="checkbox" checked>
+                                    <div class="toggle-track">
+                                        <div class="toggle-thumb"></div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="setting-row">
+                                <span>QUANTUM GEOLOCATION</span>
+                                <label class="cyber-toggle">
+                                    <input type="checkbox" checked>
+                                    <div class="toggle-track">
+                                        <div class="toggle-thumb"></div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="setting-row">
+                                <span>MATRIX VIBRATION</span>
+                                <label class="cyber-toggle">
+                                    <input type="checkbox">
+                                    <div class="toggle-track">
+                                        <div class="toggle-thumb"></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connected-devices">
+                        <div class="devices-header">
+                            <h3 class="neon-text">CONNECTED DEVICES</h3>
+                        </div>
+                        <div class="device-status">
+                            <div class="device-item">
+                                <div class="device-icon">📱</div>
+                                <span>NEURAL PHONE</span>
+                                <div class="device-state connected">CONNECTED</div>
+                            </div>
+                            <div class="device-item">
+                                <div class="device-icon">⌚</div>
+                                <span>QUANTUM WATCH</span>
+                                <div class="device-state offline">OFFLINE</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="logout-btn" id="neural-logout">
+                        <span class="btn-glow"></span>
+                        <div class="btn-content">
+                            <div class="btn-icon">⏻</div>
+                            <span>DISCONNECT NEURAL LINK</span>
+                        </div>
+                    </button>
+                </div>
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="cyber-nav">
+                <button class="nav-node active" data-page="home">
+                    <div class="node-glow"></div>
+                    <div class="nav-icon">🏠</div>
+                    <span>HOME</span>
+                </button>
+                <button class="nav-node" data-page="defi">
+                    <div class="node-glow"></div>
+                    <div class="nav-icon">💎</div>
+                    <span>DEFI</span>
+                </button>
+                <button class="nav-node" data-page="analytics">
+                    <div class="node-glow"></div>
+                    <div class="nav-icon">📊</div>
+                    <span>DATA</span>
+                </button>
+                <button class="nav-node" data-page="workouts">
+                    <div class="node-glow"></div>
+                    <div class="nav-icon">⚡</div>
+                    <span>TRAIN</span>
+                </button>
+                <button class="nav-node" data-page="rewards">
+                    <div class="node-glow"></div>
+                    <div class="nav-icon">🏆</div>
+                    <span>REWARDS</span>
+                </button>
+                <button class="nav-node" data-page="profile">
+                    <div class="node-glow"></div>
+                    <div class="nav-icon">👤</div>
+                    <span>PROFILE</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- PWA Install Prompt -->
+        <div id="install-prompt" class="install-prompt hidden">
+            <div class="install-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-title">PWA INSTALLATION PROTOCOL</div>
+                </div>
+                <div class="install-content">
+                    <h3 class="neon-text">INSTALL NEURAL INTERFACE</h3>
+                    <p>Activate standalone PWA mode for optimal neural synchronization</p>
+                    <div class="install-actions">
+                        <button id="install-btn" class="cyber-btn primary">INSTALL</button>
+                        <button id="install-dismiss" class="cyber-btn secondary">DISMISS</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./app.js"></script>
 </body>
 </html>
