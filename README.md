@@ -53,3 +53,4 @@ npx lighthouse https://tehen1.github.io/fixierun-pwa/ --output html
 - JavaScript
 - Service Workers
 - Web App Manifest
+# fixierun-pwa
