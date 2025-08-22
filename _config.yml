@@ -1,0 +1,24 @@
+# Configuration Jekyll pour GitHub Pages
+plugins:
+  - jekyll-sitemap
+
+# Headers de sécurité pour PWA
+webrick:
+  headers:
+    Service-Worker-Allowed: "/"
+    X-Content-Type-Options: "nosniff"
+    X-Frame-Options: "DENY" 
+    X-XSS-Protection: "1; mode=block"
+
+# Exclure les fichiers du build
+exclude:
+  - node_modules/
+  - .github/
+  - README.md
+  - package*.json
+
+# Configuration PWA
+pwa:
+  enabled: true
+  sw_src_filepath: sw.js
+  sw_dest_filename: sw.js
