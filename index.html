@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FixieRun - Move to Earn PWA</title>
+    <title>FixieRun - Move to Earn </title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="./manifest.json">
@@ -29,14 +29,14 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <!-- Le reste de ton CSS reste identique... -->
-    <!-- [Coller tout ton CSS existant ici] -->
+    <!-- [Coller tout ton CSS existant ici] --> 
 
 </head>
 <body class="h-full bg-bg-light dark:bg-bg-dark text-gray-900 dark:text-white transition-colors duration-300 safe-top safe-bottom">
     
     <!-- Ton HTML body reste identique... -->
     <!-- [Coller tout ton HTML body existant ici] -->
-
+     
     <script>
         // Modifier la classe FixieRunPWA
         class FixieRunPWA {
@@ -114,7 +114,7 @@
                     }
                 }
             }
-
+            
             // GPS Permissions amélioré
             async requestGPSPermission() {
                 try {
@@ -160,8 +160,28 @@
         // Initialize the complete PWA
         document.addEventListener('DOMContentLoaded', () => {
             window.fixieApp = new FixieRunPWA();
-        });
-    </script>
+        // Préchargement intelligent
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(() => {
+    // Précharger les tuiles de carte de la région
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+        preloadMapTiles(latitude, longitude, 13, 2); // zoom 13, rayon 2km
+      });
+    }
+  });
+}
+
+// Optimisation mémoire
+window.addEventListener('beforeunload', () => {
+  // Nettoyer les listeners GPS
+  if (window.watchId) {
+    navigator.geolocation.clearWatch(window.watchId);
+  }
+});
+
+</script>
 
 </body>
 </html>
