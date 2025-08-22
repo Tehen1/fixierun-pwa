@@ -1,24 +1,44 @@
 # Configuration Jekyll pour GitHub Pages
+title: "FixieRun - Move to Earn"
+description: "Earn crypto tokens by cycling and running"
+url: "https://tehen1.github.io"
+baseurl: "/fixierun-pwa"
+
 plugins:
   - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-minifier
 
-# Headers de sécurité pour PWA
-webrick:
-  headers:
-    Service-Worker-Allowed: "/"
-    X-Content-Type-Options: "nosniff"
-    X-Frame-Options: "DENY" 
-    X-XSS-Protection: "1; mode=block"
+# Optimisations PWA
+pwa:
+  enabled: true
+  sw_src_filepath: sw.js
+  sw_dest_filename: sw.js
+  precache_glob_patterns:
+    - "**/*.{html,css,js,png,jpg,gif,svg,woff2}"
 
-# Exclure les fichiers du build
+# Minification pour production
+jekyll-minifier:
+  uglifier_args:
+    harmony: true
+  compress_css: true
+  compress_javascript: true
+  compress_json: true
+
+# Exclusions build
 exclude:
   - node_modules/
   - .github/
   - README.md
   - package*.json
+  - gulpfile.js
+  - Gemfile*
 
-# Configuration PWA
-pwa:
-  enabled: true
-  sw_src_filepath: sw.js
-  sw_dest_filename: sw.js
+# Headers sécurité PWA
+webrick:
+  headers:
+    Service-Worker-Allowed: "/"
+    X-Content-Type-Options: "nosniff"
+    X-Frame-Options: "DENY"
+    X-XSS-Protection: "1; mode=block"
+    Strict-Transport-Security: "max-age=31536000; includeSubDomains"
