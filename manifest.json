@@ -2,12 +2,12 @@
   "name": "FixieRun - Move to Earn PWA",
   "short_name": "FixieRun",
   "description": "Earn crypto tokens by cycling and running with GPS tracking",
-  "start_url": "./",
+  "start_url": "/fixierun-pwa/",
+  "scope": "/fixierun-pwa/"
   "display": "standalone",
   "background_color": "#181818",
   "theme_color": "#5D5CDE",
-  "orientation": "portrait",
-  "scope": "./",
+  "orientation": "portrait"
   "lang": "fr",
   "categories": ["fitness", "health", "sports", "crypto", "lifestyle"],
   "icons": [
