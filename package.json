@@ -1,0 +1,3 @@
+"scripts": {
+  "build:css": "tailwindcss -i src/assets/tailwind.css -o docs/assets/tailwind.css --minify"
+}
