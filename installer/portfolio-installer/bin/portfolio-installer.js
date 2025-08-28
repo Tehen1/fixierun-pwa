@@ -16,7 +16,7 @@ function printHeader() {
 }
 
 function printHelp() {
-  console.log(`\nUsage:\n  ${CLI_NAME} <command> [options]\n\nCommands:\n  init              Initialize local stack templates (.env, docker compose)\n  deploy            Deploy local stack with Docker Compose\n  status            Show Docker status for the stack\n  help              Show this help\n\nOptions:\n  --target-dir <dir>    Target directory for stack files (default: ./portfolio-stack)\n  --skip-checks         Skip environment preflight checks\n`);
+  console.log(`\nUsage:\n  ${CLI_NAME} <command> [options]\n\nCommands:\n  init              Initialize local stack templates (.env, docker compose)\n  plan              Scaffold Terraform & Helm; run terraform plan if available\n  deploy            Deploy local stack with Docker Compose\n  k8s-deploy        Deploy Helm chart to Kubernetes (requires helm & kubectl)\n  k8s-status        Show Kubernetes pods for the release namespace\n  status            Show Docker status for the stack\n  help              Show this help\n\nOptions:\n  --target-dir <dir>    Target directory for stack files (default: ./portfolio-stack)\n  --skip-checks         Skip environment preflight checks\n  --namespace <ns>      Kubernetes namespace (default: portfolio)\n  --release <name>      Helm release name (default: portfolio)\n  --image-repo <repo>   Override image repository for Helm deploy\n  --image-tag <tag>     Override image tag for Helm deploy\n`);
 }
 
 function parseArgs(argv) {
@@ -28,6 +28,18 @@ function parseArgs(argv) {
       i += 1;
     } else if (token === '--skip-checks') {
       args.skipChecks = true;
+    } else if (token === '--namespace') {
+      args.namespace = argv[i + 1];
+      i += 1;
+    } else if (token === '--release') {
+      args.release = argv[i + 1];
+      i += 1;
+    } else if (token === '--image-repo') {
+      args.imageRepo = argv[i + 1];
+      i += 1;
+    } else if (token === '--image-tag') {
+      args.imageTag = argv[i + 1];
+      i += 1;
     } else if (!args.command) {
       args.command = token;
     } else {
@@ -58,6 +70,21 @@ function detectComposeCommand() {
   // Prefer `docker compose`, fallback to `docker-compose`
   if (commandExists('docker', ['compose', 'version'])) return ['docker', ['compose']];
   if (commandExists('docker-compose', ['version'])) return ['docker-compose', []];
+  return null;
+}
+
+function detectTerraform() {
+  if (commandExists('terraform', ['version'])) return 'terraform';
+  return null;
+}
+
+function detectHelm() {
+  if (commandExists('helm', ['version'])) return 'helm';
+  return null;
+}
+
+function detectKubectl() {
+  if (commandExists('kubectl', ['version', '--client'])) return 'kubectl';
   return null;
 }
 
@@ -125,6 +152,64 @@ function cmdInit(options) {
   console.log(`  - ${path.relative(process.cwd(), envDest)}`);
 }
 
+function scaffoldTerraform(targetDir) {
+  const templatesDir = getTemplatesDir();
+  const tfSrcDir = path.join(templatesDir, 'terraform');
+  const tfDestDir = path.join(targetDir, 'terraform');
+  fs.mkdirSync(tfDestDir, { recursive: true });
+  const files = ['main.tf', 'providers.tf', 'variables.tf', 'outputs.tf'];
+  for (const f of files) {
+    const src = path.join(tfSrcDir, f);
+    const dest = path.join(tfDestDir, f);
+    copyFileIfAbsent(src, dest);
+  }
+  return tfDestDir;
+}
+
+function scaffoldHelm(targetDir) {
+  const templatesDir = getTemplatesDir();
+  const helmSrcDir = path.join(templatesDir, 'helm');
+  const helmDestDir = path.join(targetDir, 'helm');
+  // copy Chart.yaml, values.yaml, templates/
+  fs.mkdirSync(path.join(helmDestDir, 'templates'), { recursive: true });
+  const files = ['Chart.yaml', 'values.yaml'];
+  for (const f of files) {
+    const src = path.join(helmSrcDir, f);
+    const dest = path.join(helmDestDir, f);
+    copyFileIfAbsent(src, dest);
+  }
+  const tmplFiles = ['deployment.yaml', 'service.yaml'];
+  for (const f of tmplFiles) {
+    const src = path.join(helmSrcDir, 'templates', f);
+    const dest = path.join(helmDestDir, 'templates', f);
+    copyFileIfAbsent(src, dest);
+  }
+  return helmDestDir;
+}
+
+function cmdPlan(options) {
+  const targetDir = path.resolve(process.cwd(), options.targetDir || 'portfolio-stack');
+  fs.mkdirSync(targetDir, { recursive: true });
+  const tfDir = scaffoldTerraform(targetDir);
+  const helmDir = scaffoldHelm(targetDir);
+  console.log(`Scaffolded Terraform at: ${tfDir}`);
+  console.log(`Scaffolded Helm chart at: ${helmDir}`);
+
+  const terraformCmd = detectTerraform();
+  if (!terraformCmd) {
+    console.log('Terraform not found; skipping plan. You can install Terraform and rerun plan.');
+    return;
+  }
+  try {
+    console.log('Running terraform init...');
+    run(terraformCmd, ['init', '-input=false', '-no-color'], { cwd: tfDir });
+    console.log('Running terraform plan...');
+    run(terraformCmd, ['plan', '-no-color'], { cwd: tfDir });
+  } catch (e) {
+    console.error(`Terraform plan failed: ${e.message}`);
+  }
+}
+
 function cmdDeploy(options) {
   const targetDir = path.resolve(process.cwd(), options.targetDir || 'portfolio-stack');
   const compose = detectComposeCommand();
@@ -159,6 +244,50 @@ function cmdStatus(options) {
   run(composeCmd, [...composeArgs, '-f', composeFile, 'ps']);
 }
 
+function cmdK8sDeploy(options) {
+  const targetDir = path.resolve(process.cwd(), options.targetDir || 'portfolio-stack');
+  const helmCmd = detectHelm();
+  if (!helmCmd) {
+    console.error('Helm not found. Install helm to use k8s-deploy.');
+    return;
+  }
+  const kubectlCmd = detectKubectl();
+  if (!kubectlCmd) {
+    console.error('kubectl not found. Install kubectl to use k8s-deploy.');
+    return;
+  }
+
+  const namespace = options.namespace || 'portfolio';
+  const release = options.release || 'portfolio';
+  const helmDir = path.join(targetDir, 'helm');
+  if (!fs.existsSync(helmDir)) {
+    console.error(`Helm chart not found at ${helmDir}. Run '${CLI_NAME} plan' first.`);
+    return;
+  }
+
+  const helmArgs = ['upgrade', '--install', release, helmDir, '-n', namespace, '--create-namespace'];
+  if (options.imageRepo) {
+    helmArgs.push('--set', `image.repository=${options.imageRepo}`);
+  }
+  if (options.imageTag) {
+    helmArgs.push('--set', `image.tag=${options.imageTag}`);
+  }
+  console.log(`Deploying Helm release '${release}' to namespace '${namespace}'...`);
+  run(helmCmd, helmArgs);
+  console.log('Helm deploy complete. Current pods:');
+  run(kubectlCmd, ['get', 'pods', '-n', namespace]);
+}
+
+function cmdK8sStatus(options) {
+  const kubectlCmd = detectKubectl();
+  if (!kubectlCmd) {
+    console.error('kubectl not found. Install kubectl to use k8s-status.');
+    return;
+  }
+  const namespace = options.namespace || 'portfolio';
+  run(kubectlCmd, ['get', 'pods', '-n', namespace]);
+}
+
 function main() {
   printHeader();
   const args = parseArgs(process.argv.slice(2));
@@ -169,8 +298,17 @@ function main() {
       case 'init':
         cmdInit(args);
         break;
+      case 'plan':
+        cmdPlan(args);
+        break;
       case 'deploy':
         cmdDeploy(args);
+        break;
+      case 'k8s-deploy':
+        cmdK8sDeploy(args);
+        break;
+      case 'k8s-status':
+        cmdK8sStatus(args);
         break;
       case 'status':
         cmdStatus(args);
