@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  fixie-api:
+    image: nginx:alpine
+    container_name: fixie-api
+    ports:
+      - "3001:80"
+    depends_on:
+      - postgres
+      - redis
+  rhymechain-api:
+    image: nginx:alpine
+    container_name: rhymechain-api
+    ports:
+      - "8000:80"
+    depends_on:
+      - postgres
+      - redis
+  seo-guru-api:
+    image: nginx:alpine
+    container_name: seo-guru-api
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:15-alpine
+    container_name: portfolio-postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-portfolio_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    container_name: portfolio-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
