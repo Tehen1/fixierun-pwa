@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>FixieRun - Move to Earn </title>
+    <title>FixieRun - Move to Earn PWA</title>
     
     <!-- PWA Manifest -->
-    <link rel="icon" href="data:;base64,=">
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#5D5CDE">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,36 +15,32 @@
     <!-- Performance & Security -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
-    <link href="/fixierun-pwa/assets/tailwind.css" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://kit.fontawesome.com">
     <link rel="preconnect" href="https://unpkg.com">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     
     <!-- CSS Libraries -->
-    
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous"></script>
     
     <!-- GPS Map - Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin="anonymous"></script>
     
-    <!-- Le reste de ton CSS reste identique... -->
-    <!-- [Coller tout ton CSS existant ici] --> 
 
 </head>
 <body class="h-full bg-bg-light dark:bg-bg-dark text-gray-900 dark:text-white transition-colors duration-300 safe-top safe-bottom">
     
-    <!-- Ton HTML body reste identique... -->
-    <!-- [Coller tout ton HTML body existant ici] -->
-     
+
     <script>
         // Modifier la classe FixieRunPWA
         class FixieRunPWA {
             constructor() {
                 // Ton state reste identique
                 this.state = {
-                    // ... ton state existant
                 };
                 
                 this.watchId = null;
@@ -116,7 +111,7 @@
                     }
                 }
             }
-            
+
             // GPS Permissions amélioré
             async requestGPSPermission() {
                 try {
@@ -155,35 +150,13 @@
                 }
             }
 
-            // Reste de tes méthodes identiques...
-            // [Coller toutes tes autres méthodes existantes ici]
-        }
+            }
 
         // Initialize the complete PWA
         document.addEventListener('DOMContentLoaded', () => {
             window.fixieApp = new FixieRunPWA();
-        // Préchargement intelligent
-if ('requestIdleCallback' in window) {
-  requestIdleCallback(() => {
-    // Précharger les tuiles de carte de la région
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        const { latitude, longitude } = position.coords;
-        preloadMapTiles(latitude, longitude, 13, 2); // zoom 13, rayon 2km
-      });
-    }
-  });
-}
-
-// Optimisation mémoire
-window.addEventListener('beforeunload', () => {
-  // Nettoyer les listeners GPS
-  if (window.watchId) {
-    navigator.geolocation.clearWatch(window.watchId);
-  }
-});
-
-</script>
+        });
+    </script>
 
 </body>
 </html>
