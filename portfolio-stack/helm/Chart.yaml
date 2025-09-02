@@ -1,0 +1,7 @@
+apiVersion: v2
+name: portfolio
+description: Minimal umbrella chart for portfolio services
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+
