@@ -12,9 +12,9 @@ updates:
     open-pull-requests-limit: 8
     target-branch: "develop"
     reviewers:
-      - "votre-username"
+      - "Tehen1"
     assignees:
-      - "votre-username"
+      - "Tehen1"
     commit-message:
       prefix: "chore"
       prefix-development: "chore"
