@@ -1,0 +1,14 @@
+# Configuration Terraform pour fixie.run
+# Copier ce fichier vers terraform.tfvars et remplir les valeurs
+
+# Token API Cloudflare
+# Générer via: https://dash.cloudflare.com/profile/api-tokens
+# Permissions requises: Zone:Read, DNS:Edit
+cloudflare_api_token = "your_cloudflare_api_token_here"
+
+# Zone ID Cloudflare pour fixie.run
+# Trouver via: https://dash.cloudflare.com -> Sélectionner le domaine -> Sidebar droite
+zone_id = "your_zone_id_here"
+
+# Domaine principal (optionnel, par défaut: fixie.run)
+domain = "fixie.run"
